@@ -13,4 +13,13 @@ export const useGithubStore = create((set) => ({
   setRepos: (repos) => set({ repos }),
   setFollowers: (followers) => set({ followers }),
   setError: (err) => set({ error: err }),
+
+  reset: () =>
+    set({
+      username: "",
+      profile: null,
+      repos: [],
+      followers: [],
+      error: null,
+    }),
 }));

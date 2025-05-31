@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useGithubStore } from "../store/githubStore";
 import { useState } from "react";
+import Spinner from "../components/Spinner";
 
 const Profile = () => {
   const { username, profile, setProfile, setError, error } = useGithubStore();
@@ -32,20 +33,23 @@ const Profile = () => {
     fetchProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
+  if (!username) {
+    return (
+      <div className="text-center mt-5">
+        <h4>Please enter a GitHub username above to view profile info.</h4>
+      </div>
+    );
+  }
+
+  if (!profile && !error) {
+    return <Spinner />;
+  }
 
   return (
-    <div>
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      )}
-
-      {profile && (
-        <div
-          className="card p-3 mx-auto"
-          style={{ maxWidth: "400px", minHeight: "400px" }}
-        >
+  <div className="mt-4">
+    {error && <div className="alert ...">{error}</div>}
+    {profile && (
+      <div className="card p-3 mx-auto" style={{ maxWidth: "400px" }}>
           <h1>Profile</h1>
 
           <img
