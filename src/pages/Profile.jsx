@@ -1,38 +1,16 @@
-import { useEffect } from "react";
 import { useGithubStore } from "../store/githubStore";
 import { useState } from "react";
 import Spinner from "../components/Spinner";
+import useFetchGithubData from "../hooks/useGitHubData";
 
 const Profile = () => {
-  const { username, profile, setProfile, setError, error } = useGithubStore();
+  const { username, profile, error } = useGithubStore();
+  useFetchGithubData("profile", username);
   const [showFullBio, setShowFullBio] = useState(false);
   const isLongBio = profile?.bio && profile.bio.length > 50;
   const bioToDisplay =
     showFullBio || !isLongBio ? profile?.bio : `${profile.bio.slice(0, 50)}...`;
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (!username) return;
-
-      try {
-        const response = await fetch(
-          `https://api.github.com/users/${username}`
-        );
-        if (!response.ok) throw new Error("User not found");
-
-        const data = await response.json();
-        console.log("This is the profile", data);
-        setProfile(data);
-        setError(null);
-      } catch (err) {
-        setProfile(null);
-        setError(err.message);
-      }
-    };
-
-    fetchProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username]);
   if (!username) {
     return (
       <div className="text-center mt-5">
@@ -46,10 +24,10 @@ const Profile = () => {
   }
 
   return (
-  <div className="mt-4">
-    {error && <div className="alert ...">{error}</div>}
-    {profile && (
-      <div className="card p-3 mx-auto" style={{ maxWidth: "400px" }}>
+    <div className="mt-4">
+      {error && <div className="alert ...">{error}</div>}
+      {profile && (
+        <div className="card p-3 mx-auto" style={{ maxWidth: "400px" }}>
           <h1>Profile</h1>
 
           <img
