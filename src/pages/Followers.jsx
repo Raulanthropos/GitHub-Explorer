@@ -19,13 +19,21 @@ const Followers = () => {
 
   if (!username) {
     return (
-      <div className="text-center mt-5">
-        <h4>Please enter a GitHub username above to view followers.</h4>
+      <h4 className="text-center mt-5">
+        Please enter a GitHub username above to view followers.
+      </h4>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="alert alert-danger mt-5 text-center" role="alert">
+        {error}
       </div>
     );
   }
 
-  if (username && followers.length === 0 && !error) {
+  if (followers.length === 0) {
     return <Spinner />;
   }
 

@@ -25,34 +25,33 @@ const useFetchGithubData = (type, username) => {
           return;
       }
 
-      try {
-        const url = endpoint
-          ? `https://api.github.com/users/${username}/${endpoint}`
-          : `https://api.github.com/users/${username}`;
+      const url = endpoint
+        ? `https://api.github.com/users/${username}/${endpoint}`
+        : `https://api.github.com/users/${username}`;
 
+      try {
         const res = await fetch(url);
 
-        if (!res.ok) throw new Error(`Failed to fetch ${type}.`);
+        if (res.status === 404) {
+          throw new Error("User not found.");
+        }
+        if (!res.ok) {
+          throw new Error(`Failed to fetch ${type}.`);
+        }
+
         const data = await res.json();
 
-        switch (type) {
-          case "followers":
-            setFollowers(data);
-            break;
-          case "repos":
-            setRepos(data);
-            break;
-          case "profile":
-            setProfile(data);
-            break;
-        }
+        if (type === "followers") setFollowers(data);
+        else if (type === "repos") setRepos(data);
+        else if (type === "profile") setProfile(data);
 
         setError(null);
       } catch (err) {
         setError(err.message);
+
         if (type === "followers") setFollowers([]);
-        if (type === "repos") setRepos([]);
-        if (type === "profile") setProfile(null);
+        else if (type === "repos") setRepos([]);
+        else if (type === "profile") setProfile(null);
       }
     };
 
