@@ -24,7 +24,15 @@ const Repositories = () => {
     );
   }
 
-  if (username && repos.length === 0 && !error) {
+  if (error) {
+    return (
+      <div className="alert alert-danger mt-5 text-center" role="alert">
+        {error}
+      </div>
+    );
+  }
+
+  if (repos.length === 0) {
     return <Spinner />;
   }
 

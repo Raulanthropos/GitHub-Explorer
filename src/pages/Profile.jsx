@@ -19,7 +19,15 @@ const Profile = () => {
     );
   }
 
-  if (!profile && !error) {
+  if (error) {
+    return (
+      <div className="alert alert-danger mt-5 text-center" role="alert">
+        {error}
+      </div>
+    );
+  }
+
+  if (!profile) {
     return <Spinner />;
   }
 
