@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGithubStore } from "../store/githubStore";
 import Spinner from "../components/Spinner";
 import Pagination from "../components/Pagination";
+import useFetchGithubData from "../hooks/useGitHubData";
 
 const Followers = () => {
-  const { username, followers, setFollowers, setError, error, profile } =
-    useGithubStore();
+  const { username, followers, error, profile } = useGithubStore();
+  useFetchGithubData("followers", username);
+
   const followersPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -14,34 +16,6 @@ const Followers = () => {
   const paginatedFollowers = followers.slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(followers.length / followersPerPage);
-
-  useEffect(() => {
-    const fetchFollowers = async () => {
-      if (!username) return;
-
-      try {
-        const response = await fetch(
-          `https://api.github.com/users/${username}/followers`
-        );
-        if (!response.ok) throw new Error("Failed to fetch followers.");
-
-        const data = await response.json();
-        setFollowers(data);
-        setError(null);
-      } catch (err) {
-        setFollowers([]);
-        setError(err.message);
-      }
-    };
-
-    fetchFollowers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username]);
-
-  // Reset to first page when username changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [username]);
 
   if (!username) {
     return (

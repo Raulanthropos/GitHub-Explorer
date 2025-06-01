@@ -1,36 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGithubStore } from "../store/githubStore";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Spinner from "../components/Spinner";
+import useFetchGithubData from "../hooks/useGitHubData";
 
 const Repositories = () => {
-  const { username, repos, setRepos, setError, error } = useGithubStore();
+  const { username, repos, error } = useGithubStore();
+  useFetchGithubData("repos", username);
 
   const [sortOrder, setSortOrder] = useState("desc");
-
-  useEffect(() => {
-    const fetchRepos = async () => {
-      if (!username) return;
-
-      try {
-        const response = await fetch(
-          `https://api.github.com/users/${username}/repos`
-        );
-        if (!response.ok) throw new Error("Failed to fetch repositories.");
-
-        const data = await response.json();
-        console.log("These are the repos", data);
-        setRepos(data);
-        setError(null);
-      } catch (err) {
-        setRepos([]);
-        setError(err.message);
-      }
-    };
-
-    fetchRepos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username]);
 
   const sortedRepos = [...repos].sort((a, b) => {
     return sortOrder === "asc"
