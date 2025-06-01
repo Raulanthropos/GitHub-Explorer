@@ -83,5 +83,6 @@ src/
 - Displaying the follower's GitHub username (`login`) was the only viable and efficient option.
 - No extra API calls were made per follower, to avoid rate limit issues and keep performance optimal.
 - All API requests were made to GitHub’s public REST API at `https://api.github.com`, which provides free access to public user data.
+- Refactor and hotfix branches were intentionally left in the repository to allow reviewers to track the development process and see each isolated change.
 
 ---
