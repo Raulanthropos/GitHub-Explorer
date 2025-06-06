@@ -1,4 +1,4 @@
-# GitHub Explorer – Take-Home Assignment
+# GitHub Explorer
 
 A single-page application for browsing GitHub user information, built with React and Zustand.
 
