@@ -5,23 +5,25 @@ import { useNavigate } from "react-router-dom";
 const SearchBar = () => {
   const [input, setInput] = useState("");
   const setUsername = useGithubStore((state) => state.setUsername);
-  const setError = useGithubStore((state) => state.setError);
-  const error = useGithubStore((state) => state.error);
+  const setSearchError = useGithubStore((state) => state.setSearchError);
+  const searchError = useGithubStore((state) => state.searchError);
   const navigate = useNavigate();
   const reset = useGithubStore((state) => state.reset);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (input.length < 3) {
-      setError("Please write at least 3 characters to search for a username.");
+      setSearchError(
+        "Please write at least 3 characters to search for a username."
+      );
       return;
     } else {
       setUsername(input.trim());
-      setError(null);
+      setSearchError(null);
       navigate("/");
     }
     if (!input.trim()) {
-      setError("Please enter a username.");
+      setSearchError("Please enter a username.");
       return;
     }
   };
@@ -74,12 +76,9 @@ const SearchBar = () => {
             Search
           </button>
         </form>
-        {error && (
-          <div
-            className="text-white bg-danger text-center mt-2 p-4"
-            style={{ maxWidth: 500 }}
-          >
-            {error}
+        {searchError && (
+          <div className="alert alert-danger mt-5 text-center" role="alert">
+            {searchError}
           </div>
         )}
       </div>
