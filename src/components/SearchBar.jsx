@@ -6,20 +6,24 @@ const SearchBar = () => {
   const [input, setInput] = useState("");
   const setUsername = useGithubStore((state) => state.setUsername);
   const setError = useGithubStore((state) => state.setError);
+  const error = useGithubStore((state) => state.error);
   const navigate = useNavigate();
   const reset = useGithubStore((state) => state.reset);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    if (input.length < 3) {
+      setError("Please write at least 3 characters to search for a username.");
+      return;
+    } else {
+      setUsername(input.trim());
+      setError(null);
+      navigate("/");
+    }
     if (!input.trim()) {
       setError("Please enter a username.");
       return;
     }
-
-    setUsername(input.trim());
-    setError(null);
-    navigate("/");
   };
 
   return (
@@ -34,7 +38,7 @@ const SearchBar = () => {
       }}
     >
       <div
-        className="d-flex justify-content-center"
+        className="d-flex justify-content-center flex-column align-items-center"
         style={{ maxWidth: "100vw" }}
       >
         <form
@@ -70,6 +74,14 @@ const SearchBar = () => {
             Search
           </button>
         </form>
+        {error && (
+          <div
+            className="text-white bg-danger text-center mt-2 p-4"
+            style={{ maxWidth: 500 }}
+          >
+            {error}
+          </div>
+        )}
       </div>
     </div>
   );
