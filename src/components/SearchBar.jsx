@@ -1,29 +1,62 @@
 import { useState } from "react";
 import { useGithubStore } from "../store/githubStore";
-import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   const [input, setInput] = useState("");
+  const setProfile = useGithubStore((state) => state.setProfile);
+  const setRepos = useGithubStore((state) => state.setRepos);
+  const setFollowers = useGithubStore((state) => state.setFollowers);
   const setUsername = useGithubStore((state) => state.setUsername);
+  const setError = useGithubStore((state) => state.setError);
   const setSearchError = useGithubStore((state) => state.setSearchError);
   const searchError = useGithubStore((state) => state.searchError);
-  const navigate = useNavigate();
   const reset = useGithubStore((state) => state.reset);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.length < 3) {
       setSearchError(
         "Please write at least 3 characters to search for a username."
       );
       return;
-    } else {
-      setUsername(input.trim());
-      setSearchError(null);
     }
     if (!input.trim()) {
       setSearchError("Please enter a username.");
       return;
+    }
+    reset();
+    setUsername(input.trim());
+    setSearchError(null);
+
+    const usernameTrimmed = input.trim();
+    try {
+      // Fetch profile
+      const profileRes = await fetch(
+        `https://api.github.com/users/${usernameTrimmed}`
+      );
+      const profileData = await profileRes.json();
+      if (!profileRes.ok) throw new Error("Failed to fetch profile");
+      setProfile(profileData);
+
+      // Fetch repos
+      const reposRes = await fetch(
+        `https://api.github.com/users/${usernameTrimmed}/repos`
+      );
+      const reposData = await reposRes.json();
+      if (!reposRes.ok) throw new Error("Failed to fetch repos");
+      setRepos(reposData);
+
+      // Fetch followers
+      const followersRes = await fetch(
+        `https://api.github.com/users/${usernameTrimmed}/followers`
+      );
+      const followersData = await followersRes.json();
+      if (!followersRes.ok) throw new Error("Failed to fetch followers");
+      setFollowers(followersData);
+
+      setError(null);
+    } catch (err) {
+      setError(err.message);
     }
   };
 
