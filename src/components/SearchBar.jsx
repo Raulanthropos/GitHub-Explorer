@@ -20,7 +20,6 @@ const SearchBar = () => {
     } else {
       setUsername(input.trim());
       setSearchError(null);
-      navigate("/");
     }
     if (!input.trim()) {
       setSearchError("Please enter a username.");
