@@ -35,7 +35,10 @@ const Profile = () => {
     <div className="mt-4">
       {error && <div className="alert ...">{error}</div>}
       {profile && (
-        <div className="card p-3 mx-auto" style={{ maxWidth: "400px" }}>
+        <div
+          className="card p-3 mx-auto"
+          style={{ minWidth: "300px", maxWidth: "400px" }}
+        >
           <h1>Profile</h1>
 
           <img

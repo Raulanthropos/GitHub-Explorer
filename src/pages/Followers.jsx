@@ -39,8 +39,6 @@ const Followers = () => {
 
   return (
     <div>
-      <h1 className="mb-3">Followers</h1>
-
       {error && (
         <div className="alert alert-danger" role="alert">
           {error}
@@ -50,10 +48,17 @@ const Followers = () => {
         <h1>Followers {profile?.followers ? `(${profile.followers})` : ""}</h1>
       </div>
       {paginatedFollowers.length > 0 ? (
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 justify-content-center">
           {paginatedFollowers.map((follower) => (
-            <div key={follower.id} className="col">
-              <div className="card h-100">
+            <div
+              key={follower.id}
+              className="col d-flex justify-content-center"
+            >
+              {" "}
+              <div
+                className="card h-100 w-100"
+                style={{ minWidth: "300px", maxWidth: "400px" }}
+              >
                 <img
                   src={follower.avatar_url}
                   alt={follower.login}
